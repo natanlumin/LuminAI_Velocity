@@ -1,0 +1,97 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>VelocityCore · LuminAI</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Instrument+Serif:ital@0;1&family=Geist:wght@300;400;500;600&family=Geist+Mono:wght@300;400;500;600&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="static/css/main.css">
+</head>
+<body>
+  <div class="grain" aria-hidden="true"></div>
+  <div class="vignette" aria-hidden="true"></div>
+
+  <header class="topbar">
+    <div class="brand">
+      <span class="brand-mark" aria-hidden="true"></span>
+      <span class="brand-name">LuminAI <em>VelocityCore</em></span>
+      <span class="brand-tag">v0.1 · INTERNAL</span>
+    </div>
+    <div class="sprint-meta">
+      <div class="meta-row"><span class="meta-label">SPRINT</span><span class="meta-value">03</span></div>
+      <div class="meta-row"><span class="meta-label">DAY</span><span class="meta-value"><span id="meta-day">07</span><span class="dim">/14</span></span></div>
+      <div class="meta-row"><span class="meta-label">PACE</span><span class="meta-value"><span id="meta-pace">50</span><span class="dim">%</span></span></div>
+    </div>
+    <div class="kpi-display">
+      <span class="kpi-label">VELOCITY KPI</span>
+      <span class="kpi-value" id="kpi-value">0.0</span>
+      <span class="kpi-status" id="kpi-status">—</span>
+    </div>
+  </header>
+
+  <section class="timeline" aria-label="Sprint timeline scrubber">
+    <div class="timeline-label">
+      <span class="tl-eyebrow">SPRINT TIMELINE</span>
+      <span class="tl-readout">
+        DAY <span id="tl-day">07</span><span class="dim">/14</span>
+        <span class="tl-sep">·</span>
+        EXPECTED <span id="tl-pace">50</span><span class="dim">%</span>
+      </span>
+    </div>
+    <div class="timeline-track-wrap">
+      <div class="timeline-ticks" id="timeline-ticks"></div>
+      <input type="range" id="timeline-slider" class="timeline-slider"
+        min="1" max="14" step="1" value="7" aria-label="Sprint day" />
+    </div>
+    <div class="timeline-presets">
+      <button class="preset" data-day="1">START</button>
+      <button class="preset" data-day="7">MID</button>
+      <button class="preset" data-day="14">END</button>
+    </div>
+  </section>
+
+  <main class="grid">
+    <section class="panel momentum-panel">
+      <header class="panel-header">
+        <h2 class="panel-title"><span class="dot"></span>Momentum</h2>
+        <span class="panel-sub"><em>progress</em> × <em>strategic weight</em></span>
+        <span class="hint">hover any bubble for detail</span>
+      </header>
+      <div class="canvas-wrap">
+        <canvas id="momentum-canvas"></canvas>
+        <div class="tooltip" id="momentum-tooltip" hidden></div>
+      </div>
+      <footer class="canvas-legend" id="canvas-legend"></footer>
+    </section>
+
+    <aside class="panel legs-panel">
+      <header class="panel-header">
+        <h2 class="panel-title"><span class="dot"></span>Leg Scores</h2>
+        <span class="panel-sub"><em>weighted contribution</em></span>
+      </header>
+      <div class="legs" id="legs"></div>
+      <footer class="legs-foot">
+        <span class="legs-foot-label">EXPECTED PACE · DAY 07/14</span>
+        <span class="legs-foot-line"></span>
+        <span class="legs-foot-val">50%</span>
+      </footer>
+    </aside>
+
+    <section class="panel blocks-panel">
+      <header class="panel-header">
+        <h2 class="panel-title"><span class="dot"></span>Blocks</h2>
+        <span class="panel-sub"><em>seven · sprint 03</em></span>
+        <span class="hint">drag any slider — feel the system respond →</span>
+      </header>
+      <div class="blocks" id="blocks"></div>
+    </section>
+  </main>
+
+  <script src="static/js/data.js"></script>
+  <script src="static/js/kpi.js"></script>
+  <script src="static/js/momentum.js"></script>
+  <script src="static/js/app.js"></script>
+</body>
+</html>

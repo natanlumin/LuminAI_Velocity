@@ -1,0 +1,15 @@
+# Python / uv
+.venv/
+__pycache__/
+*.pyc
+*.pyo
+.python-version
+
+# IDE
+.idea/
+.vscode/
+*.swp
+.DS_Store
+
+# Logs / runtime
+*.log
