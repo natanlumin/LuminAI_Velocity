@@ -115,7 +115,7 @@ const Momentum = (() => {
 
   function drawGrid() {
     ctx.save();
-    ctx.strokeStyle = 'rgba(232,231,229,0.035)';
+    ctx.strokeStyle = 'rgba(26,25,22,0.05)';
     ctx.lineWidth = 1;
     const innerW = w - PADDING.left - PADDING.right;
     const innerH = h - PADDING.top - PADDING.bottom;
@@ -136,8 +136,8 @@ const Momentum = (() => {
 
   function drawAxes() {
     ctx.save();
-    ctx.strokeStyle = 'rgba(232,231,229,0.20)';
-    ctx.fillStyle = 'rgba(138,139,133,0.85)';
+    ctx.strokeStyle = 'rgba(26,25,22,0.22)';
+    ctx.fillStyle = 'rgba(94,93,86,0.95)';
     ctx.font = '500 9px "Geist Mono", "JetBrains Mono", monospace';
     ctx.lineWidth = 1;
 
@@ -170,7 +170,7 @@ const Momentum = (() => {
       ctx.fillText(`${p}`, PADDING.left - 9, y);
     }
 
-    ctx.fillStyle = 'rgba(74,76,79,1)';
+    ctx.fillStyle = 'rgba(151,149,140,1)';
     ctx.textAlign = 'right';
     ctx.textBaseline = 'top';
     ctx.fillText('PROGRESS  →', w - PADDING.right, h - PADDING.bottom + 26);
@@ -183,7 +183,7 @@ const Momentum = (() => {
   function drawExpectedLine() {
     const { x } = dataToCanvas(EXPECTED_PACE, 0);
     ctx.save();
-    ctx.strokeStyle = 'rgba(232,231,229,0.34)';
+    ctx.strokeStyle = 'rgba(26,25,22,0.40)';
     ctx.lineWidth = 1;
     ctx.setLineDash([4, 5]);
     ctx.lineDashOffset = -dashOffset;
@@ -194,7 +194,7 @@ const Momentum = (() => {
     ctx.restore();
 
     ctx.save();
-    ctx.fillStyle = 'rgba(232,231,229,0.6)';
+    ctx.fillStyle = 'rgba(26,25,22,0.7)';
     ctx.font = '500 9px "Geist Mono", monospace';
     ctx.textAlign = 'left';
     ctx.textBaseline = 'top';
@@ -268,7 +268,7 @@ const Momentum = (() => {
 
       if (hovered === s) {
         ctx.save();
-        ctx.strokeStyle = 'rgba(232,231,229,0.8)';
+        ctx.strokeStyle = 'rgba(26,25,22,0.85)';
         ctx.lineWidth = 1.25;
         ctx.setLineDash([3, 3]);
         ctx.beginPath();
@@ -278,7 +278,7 @@ const Momentum = (() => {
       }
 
       ctx.save();
-      ctx.fillStyle = 'rgba(10,11,13,0.85)';
+      ctx.fillStyle = 'rgba(255,255,255,0.95)';
       ctx.font = `600 ${Math.max(9, Math.floor(s.r / 2.2))}px "Geist Mono", "JetBrains Mono", monospace`;
       ctx.textAlign = 'center';
       ctx.textBaseline = 'middle';

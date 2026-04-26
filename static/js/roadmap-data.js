@@ -3,6 +3,11 @@
    and every downstream component (slider, ticks, chart, series)
    recomputes from those values.                                 */
 
+/* Strategic Velocity (investor view) — constants + runtime state.
+   MILESTONES is loaded from /api/milestones at page init. */
+
+let MILESTONES = [];
+
 const INVESTOR_KPIS = ['runtime', 'compliance', 'advisory', 'agenticai'];
 
 const INVESTOR_KPI_LABELS = {
@@ -37,7 +42,9 @@ const ROADMAP_START_TS = parseDate(ROADMAP_START);
 const ROADMAP_END_TS = parseDate(ROADMAP_END);
 const ROADMAP_TOTAL_DAYS = Math.round((ROADMAP_END_TS - ROADMAP_START_TS) / 86400000);
 
-const MILESTONES = [
+/* Seed retained for static fallback / reference only — runtime data
+   comes from /api/milestones. */
+const _MILESTONES_SEED = [
   // RUNTIME — Cyber + Technology
   { id: 1,  kpi: 'runtime',    name: 'Initial DLP prototype',           date: '2025-08-15', completedDate: '2025-08-22', weight: 1 },
   { id: 2,  kpi: 'runtime',    name: 'Threat-model framework v1',       date: '2025-10-10', completedDate: '2025-10-12', weight: 1 },

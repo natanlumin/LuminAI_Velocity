@@ -2,7 +2,14 @@
    Strategic Velocity — page wiring.
    ============================================================= */
 
-function initInvestors() {
+async function initInvestors() {
+  try {
+    MILESTONES = await fetch('/api/milestones').then(r => r.json());
+  } catch (e) {
+    console.error('Failed to load milestones — backend running?', e);
+    MILESTONES = [];
+  }
+
   Burnup.init();
   Burnup.startLoop();
 
@@ -11,9 +18,22 @@ function initInvestors() {
   renderMilestonesGrid();
   renderLegend();
   renderModeToggle();
+  initModal();
   recompute();
 
   requestAnimationFrame(() => Burnup.resize());
+}
+
+async function reloadMilestones() {
+  try {
+    const fresh = await fetch('/api/milestones').then(r => r.json());
+    MILESTONES.length = 0;
+    MILESTONES.push(...fresh);
+    renderMilestonesGrid();
+    recompute();
+  } catch (e) {
+    console.error('Reload failed', e);
+  }
 }
 
 function renderTimeline() {
@@ -121,6 +141,7 @@ function renderMilestonesGrid() {
         <header class="ms-col-head">
           <span class="ms-col-strip"></span>
           <h3 class="ms-col-name">${INVESTOR_KPI_LABELS[kpi]}</h3>
+          <button type="button" class="ms-add-btn" data-kpi="${kpi}" title="Add milestone">+</button>
         </header>
         <div class="ms-list">
           ${ms.map(milestoneTemplate).join('')}
@@ -130,14 +151,28 @@ function renderMilestonesGrid() {
   }).join('');
 
   container.querySelectorAll('.ms-row').forEach(el => {
-    el.addEventListener('click', () => toggleMilestone(parseInt(el.dataset.id, 10)));
+    el.addEventListener('click', (e) => {
+      if (e.target.closest('.ms-edit')) return;
+      toggleMilestone(parseInt(el.dataset.id, 10));
+    });
+  });
+  container.querySelectorAll('.ms-edit').forEach(el => {
+    el.addEventListener('click', (e) => {
+      e.stopPropagation();
+      const id = parseInt(el.dataset.id, 10);
+      const m = MILESTONES.find(x => x.id === id);
+      if (m) openMilestoneModal({ milestone: m });
+    });
+  });
+  container.querySelectorAll('.ms-add-btn').forEach(el => {
+    el.addEventListener('click', () => openMilestoneModal({ kpi: el.dataset.kpi }));
   });
 }
 
 function milestoneTemplate(m) {
   const completed = !!m.completedDate;
   return `
-    <button type="button" class="ms-row ${completed ? 'completed' : ''}" data-id="${m.id}">
+    <div class="ms-row ${completed ? 'completed' : ''}" data-id="${m.id}" role="button" tabindex="0">
       <span class="ms-check"></span>
       <span class="ms-body">
         <span class="ms-name">${escapeHtmlInv(m.name)}</span>
@@ -147,26 +182,41 @@ function milestoneTemplate(m) {
         </span>
       </span>
       <span class="ms-weight">w${m.weight}</span>
-    </button>
+      <button type="button" class="ms-edit" data-id="${m.id}" title="Edit milestone" aria-label="Edit">⋯</button>
+    </div>
   `;
 }
 
-function toggleMilestone(id) {
+async function toggleMilestone(id) {
   const m = MILESTONES.find(x => x.id === id);
-  if (m.completedDate) {
-    m.completedDate = null;
-  } else {
-    m.completedDate = TODAY_DATE;
+  if (!m) return;
+  const wasCompleted = !!m.completedDate;
+  const endpoint = wasCompleted ? 'unship' : 'ship';
+  try {
+    const resp = await fetch(`/api/milestones/${id}/${endpoint}`, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ date: TODAY_DATE }),
+    });
+    if (!resp.ok) throw new Error('toggle failed');
+    const updated = await resp.json();
+    Object.assign(m, updated);
+  } catch (e) {
+    console.error('Toggle persist failed', e);
+    return;
   }
+
   const row = document.querySelector(`.ms-row[data-id="${id}"]`);
-  const completed = !!m.completedDate;
-  row.classList.toggle('completed', completed);
-  const dates = row.querySelector('.ms-dates');
-  dates.innerHTML = `
-    <span class="ms-planned">${formatInvDate(m.date)}</span>
-    ${completed ? `<span class="ms-actual">→ ${formatInvDate(m.completedDate)}</span>` : ''}
-  `;
-  if (completed) Burnup.ripple(id);
+  if (row) {
+    const completed = !!m.completedDate;
+    row.classList.toggle('completed', completed);
+    const dates = row.querySelector('.ms-dates');
+    dates.innerHTML = `
+      <span class="ms-planned">${formatInvDate(m.date)}</span>
+      ${completed ? `<span class="ms-actual">→ ${formatInvDate(m.completedDate)}</span>` : ''}
+    `;
+    if (completed) Burnup.ripple(id);
+  }
   recompute();
 }
 
@@ -310,6 +360,87 @@ function formatInvDate(iso) {
 
 function truncate(s, n) {
   return s.length <= n ? s : s.slice(0, n - 1) + '…';
+}
+
+/* =============================================================
+   Milestone create/edit/delete modal
+   ============================================================= */
+
+let _editingId = null;
+
+function initModal() {
+  const modal = document.getElementById('ms-modal');
+  if (!modal) return;
+  modal.querySelectorAll('[data-close]').forEach(el => el.addEventListener('click', closeModal));
+  document.getElementById('ms-form').addEventListener('submit', submitMilestoneForm);
+  document.getElementById('ms-delete').addEventListener('click', deleteFromModal);
+  document.addEventListener('keydown', (e) => {
+    if (e.key === 'Escape' && !modal.hidden) closeModal();
+  });
+}
+
+function openMilestoneModal({ kpi = null, milestone = null } = {}) {
+  const isEdit = !!milestone;
+  _editingId = isEdit ? milestone.id : null;
+  document.getElementById('modal-title').textContent = isEdit ? 'Edit Milestone' : 'New Milestone';
+  document.getElementById('ms-kpi').value = milestone?.kpi || kpi || 'runtime';
+  document.getElementById('ms-name').value = milestone?.name || '';
+  document.getElementById('ms-date').value = milestone?.date || TODAY_DATE;
+  document.getElementById('ms-weight').value = milestone?.weight ?? 1;
+  document.getElementById('ms-delete').hidden = !isEdit;
+  document.getElementById('ms-modal').hidden = false;
+  setTimeout(() => document.getElementById('ms-name').focus(), 50);
+}
+
+function closeModal() {
+  document.getElementById('ms-modal').hidden = true;
+  _editingId = null;
+}
+
+async function submitMilestoneForm(e) {
+  e.preventDefault();
+  const body = {
+    kpi: document.getElementById('ms-kpi').value,
+    name: document.getElementById('ms-name').value.trim(),
+    date: document.getElementById('ms-date').value,
+    weight: parseInt(document.getElementById('ms-weight').value, 10) || 1,
+  };
+  if (!body.name || !body.date) return;
+  const url = _editingId ? `/api/milestones/${_editingId}` : '/api/milestones';
+  const method = _editingId ? 'PUT' : 'POST';
+  try {
+    const resp = await fetch(url, {
+      method,
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(body),
+    });
+    if (!resp.ok) {
+      const err = await resp.json().catch(() => ({}));
+      alert('Save failed: ' + (err.error || resp.status));
+      return;
+    }
+    await reloadMilestones();
+    closeModal();
+  } catch (err) {
+    console.error('Save failed', err);
+    alert('Save failed — is the server running?');
+  }
+}
+
+async function deleteFromModal() {
+  if (!_editingId) return;
+  if (!confirm('Delete this milestone permanently?')) return;
+  try {
+    const resp = await fetch(`/api/milestones/${_editingId}`, { method: 'DELETE' });
+    if (!resp.ok && resp.status !== 204) {
+      alert('Delete failed: ' + resp.status);
+      return;
+    }
+    await reloadMilestones();
+    closeModal();
+  } catch (err) {
+    console.error('Delete failed', err);
+  }
 }
 
 document.addEventListener('DOMContentLoaded', initInvestors);

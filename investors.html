@@ -16,8 +16,8 @@
 
   <header class="topbar">
     <div class="brand">
-      <span class="brand-mark" aria-hidden="true"></span>
-      <span class="brand-name">LuminAI <em>Strategic Velocity</em></span>
+      <img src="static/images/luminai-logo.png" class="brand-mark" alt="LuminAI Security" />
+      <span class="brand-product">Strategic Velocity</span>
       <span class="brand-tag">v0.1 · EXTERNAL</span>
     </div>
     <div class="sprint-meta">
@@ -95,6 +95,44 @@
       <div class="milestones-grid" id="milestones-grid"></div>
     </section>
   </main>
+
+  <div class="modal" id="ms-modal" hidden role="dialog" aria-modal="true" aria-labelledby="modal-title">
+    <div class="modal-backdrop" data-close></div>
+    <div class="modal-panel" role="document">
+      <header class="modal-head">
+        <h3 class="modal-title" id="modal-title">New Milestone</h3>
+        <button type="button" class="modal-close" data-close aria-label="Close">×</button>
+      </header>
+      <form class="modal-form" id="ms-form">
+        <label class="form-row">
+          <span class="form-label">KPI</span>
+          <select id="ms-kpi" required>
+            <option value="runtime">Runtime</option>
+            <option value="compliance">Compliance</option>
+            <option value="advisory">Advisory</option>
+            <option value="agenticai">Agentic AI</option>
+          </select>
+        </label>
+        <label class="form-row">
+          <span class="form-label">Name</span>
+          <input type="text" id="ms-name" required maxlength="120" placeholder="e.g. DLP v3 GA" />
+        </label>
+        <label class="form-row form-row-half">
+          <span class="form-label">Planned Date</span>
+          <input type="date" id="ms-date" required />
+        </label>
+        <label class="form-row form-row-half">
+          <span class="form-label">Weight</span>
+          <input type="number" id="ms-weight" required min="1" max="10" value="1" />
+        </label>
+        <footer class="modal-foot">
+          <button type="button" class="btn btn-danger" id="ms-delete" hidden>Delete</button>
+          <button type="button" class="btn btn-secondary" data-close>Cancel</button>
+          <button type="submit" class="btn btn-primary">Save</button>
+        </footer>
+      </form>
+    </div>
+  </div>
 
   <script src="static/js/roadmap-data.js"></script>
   <script src="static/js/burnup.js"></script>

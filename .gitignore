@@ -13,3 +13,7 @@ __pycache__/
 
 # Logs / runtime
 *.log
+
+# Persisted runtime state (regenerated from app.py seeds)
+data/*.json
+data/*.tmp

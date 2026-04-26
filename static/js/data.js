@@ -1,3 +1,8 @@
+/* Internal sprint dashboard — constants + runtime state.
+   BLOCKS is loaded from /api/blocks at page init (see app.js). */
+
+let BLOCKS = [];
+
 const LEG_COLORS = {
   runtime: '#1D9E75',
   advisory: '#185FA5',
@@ -23,7 +28,9 @@ let SPRINT_DAY = 7;
 const SPRINT_LENGTH = 14;
 let EXPECTED_PACE = (SPRINT_DAY / SPRINT_LENGTH) * 100;
 
-const BLOCKS = [
+/* Seed retained for static fallback / reference only — runtime data
+   comes from /api/blocks. */
+const _BLOCKS_SEED = [
   {
     id: 1,
     name: "DLP Detection v2",

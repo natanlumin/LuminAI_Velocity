@@ -2,7 +2,14 @@
    App — DOM rendering, slider wiring, KPI/leg recomputation.
    ============================================================= */
 
-function init() {
+async function init() {
+  try {
+    BLOCKS = await fetch('/api/blocks').then(r => r.json());
+  } catch (e) {
+    console.error('Failed to load blocks from API — backend running?', e);
+    BLOCKS = [];
+  }
+
   Momentum.init();
   Momentum.setBlocks(BLOCKS);
   Momentum.startLoop();
@@ -14,7 +21,6 @@ function init() {
   applyExpectedPace();
   recompute();
 
-  // After a tick, kick the canvas resize so it picks up final layout.
   requestAnimationFrame(() => Momentum.resize());
 }
 
@@ -202,6 +208,26 @@ function onSliderInput(blockId, value) {
 
   Momentum.updateBlock(block);
   recompute();
+  schedulePersist(blockId, value);
+}
+
+const _pendingProgress = new Map();
+let _persistTimer = null;
+function schedulePersist(blockId, progress) {
+  _pendingProgress.set(blockId, progress);
+  clearTimeout(_persistTimer);
+  _persistTimer = setTimeout(flushPersist, 250);
+}
+async function flushPersist() {
+  const updates = Array.from(_pendingProgress.entries());
+  _pendingProgress.clear();
+  for (const [id, progress] of updates) {
+    fetch(`/api/blocks/${id}`, {
+      method: 'PUT',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ progress }),
+    }).catch(e => console.error(`block ${id} persist failed`, e));
+  }
 }
 
 function recompute() {

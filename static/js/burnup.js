@@ -119,7 +119,7 @@ const Burnup = (() => {
 
   function drawGrid() {
     ctx.save();
-    ctx.strokeStyle = 'rgba(232,231,229,0.035)';
+    ctx.strokeStyle = 'rgba(26,25,22,0.05)';
     ctx.lineWidth = 1;
     const innerW = w - PADDING.left - PADDING.right;
     const innerH = h - PADDING.top - PADDING.bottom;
@@ -157,8 +157,8 @@ const Burnup = (() => {
 
   function drawAxes() {
     ctx.save();
-    ctx.strokeStyle = 'rgba(232,231,229,0.20)';
-    ctx.fillStyle = 'rgba(138,139,133,0.85)';
+    ctx.strokeStyle = 'rgba(26,25,22,0.22)';
+    ctx.fillStyle = 'rgba(94,93,86,0.95)';
     ctx.font = '500 9px "Geist Mono", "JetBrains Mono", monospace';
     ctx.lineWidth = 1;
 
@@ -185,23 +185,23 @@ const Burnup = (() => {
     months.forEach((m, i) => {
       const x = dateToX(m.ts);
       const isJan = m.date.getMonth() === 0;
-      ctx.strokeStyle = isJan ? 'rgba(232,231,229,0.30)' : 'rgba(232,231,229,0.18)';
+      ctx.strokeStyle = isJan ? 'rgba(26,25,22,0.34)' : 'rgba(26,25,22,0.20)';
       ctx.beginPath();
       ctx.moveTo(x, h - PADDING.bottom);
       ctx.lineTo(x, h - PADDING.bottom + (isJan ? 7 : 4));
       ctx.stroke();
 
-      ctx.fillStyle = isJan ? 'rgba(232,231,229,0.7)' : 'rgba(138,139,133,0.85)';
+      ctx.fillStyle = isJan ? 'rgba(26,25,22,0.78)' : 'rgba(94,93,86,0.95)';
       ctx.textAlign = 'center';
       ctx.textBaseline = 'top';
       ctx.fillText(monthNames[m.date.getMonth()], x, h - PADDING.bottom + 12);
       if (m.date.getMonth() === 0 || i === 0) {
-        ctx.fillStyle = 'rgba(74,76,79,1)';
+        ctx.fillStyle = 'rgba(151,149,140,1)';
         ctx.fillText(`'${String(m.date.getFullYear()).slice(-2)}`, x, h - PADDING.bottom + 26);
       }
     });
 
-    ctx.fillStyle = 'rgba(74,76,79,1)';
+    ctx.fillStyle = 'rgba(151,149,140,1)';
     ctx.textAlign = 'left';
     ctx.fillText('↑  % ROADMAP DELIVERED', PADDING.left - 4, PADDING.top - 20);
     ctx.textAlign = 'right';
@@ -215,20 +215,20 @@ const Burnup = (() => {
     if (ts < ROADMAP_START_TS || ts > ROADMAP_END_TS) return;
     const x = dateToX(ts);
     ctx.save();
-    ctx.strokeStyle = 'rgba(232,231,229,0.55)';
+    ctx.strokeStyle = 'rgba(26,25,22,0.55)';
     ctx.lineWidth = 1.25;
     ctx.beginPath();
     ctx.moveTo(x, PADDING.top - 6);
     ctx.lineTo(x, h - PADDING.bottom);
     ctx.stroke();
 
-    ctx.fillStyle = 'rgba(232,231,229,0.85)';
+    ctx.fillStyle = 'rgba(26,25,22,0.85)';
     ctx.font = '500 9px "Geist Mono", monospace';
     ctx.textAlign = 'left';
     ctx.textBaseline = 'top';
     ctx.fillText('TODAY', x + 6, PADDING.top - 6);
 
-    ctx.fillStyle = 'rgba(232,231,229,1)';
+    ctx.fillStyle = 'rgba(26,25,22,1)';
     ctx.beginPath();
     ctx.arc(x, PADDING.top - 8, 3, 0, Math.PI * 2);
     ctx.fill();
@@ -370,14 +370,14 @@ const Burnup = (() => {
       const isHovered = hoveredMs === p.ms.id;
       ctx.save();
       ctx.fillStyle = color;
-      ctx.strokeStyle = '#0a0b0d';
+      ctx.strokeStyle = '#f5f4ef';
       ctx.lineWidth = 2;
       ctx.beginPath();
       ctx.arc(x, y, isHovered ? 6 : 4, 0, Math.PI * 2);
       ctx.fill();
       ctx.stroke();
       if (isHovered) {
-        ctx.strokeStyle = 'rgba(232,231,229,0.85)';
+        ctx.strokeStyle = 'rgba(26,25,22,0.85)';
         ctx.lineWidth = 1;
         ctx.setLineDash([2, 2]);
         ctx.beginPath();
