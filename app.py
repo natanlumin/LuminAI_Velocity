@@ -8,6 +8,7 @@ this is the demo backend, not a production multi-user service.
 from __future__ import annotations
 
 import json
+import os
 from datetime import date
 from pathlib import Path
 from threading import Lock
@@ -302,6 +303,24 @@ def delete_milestone(ms_id: int):
 # Entrypoint
 # --------------------------------------------------------------------------
 
+def _print_banner(host: str, port: int) -> None:
+    base = f"http://{host}:{port}"
+    print()
+    print("  ━━━  LuminAI VelocityCore  ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━")
+    print()
+    print(f"    Internal (sprint KPIs)              {base}/")
+    print(f"    Strategic Velocity (investor view)  {base}/investors.html")
+    print()
+    print("  Press CTRL+C to stop.  State persists in data/*.json.")
+    print("  ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━")
+    print()
+
+
 if __name__ == "__main__":
     ensure_data_files()
-    app.run(host="127.0.0.1", port=5173, debug=True)
+    HOST = "127.0.0.1"
+    PORT = 5173
+    # WERKZEUG_RUN_MAIN is set by the reloader's child process; print only once.
+    if os.environ.get("WERKZEUG_RUN_MAIN") != "true":
+        _print_banner(HOST, PORT)
+    app.run(host=HOST, port=PORT, debug=True)
