@@ -37,16 +37,47 @@ The chart is a non-decreasing polygon per KPI: every milestone you ship steps th
 
 | Action | How |
 |---|---|
-| Ship a milestone | Click any row in the bottom milestone list. Polygon steps up, ripple ring fires at the new point. |
+| Ship a milestone | Click any row in the milestone list. Polygon steps up, ripple ring fires at the new point. |
 | Un-ship a milestone | Click the same row again. Original ship date is preserved if you re-ship later. |
-| Add a new milestone | Click the `+` button at the top of any KPI column. Fill the modal: name, planned date, weight. |
-| Edit / delete | Hover any milestone row, click the `⋯` icon, edit fields or hit the red `Delete` button. |
+| Add a new milestone | Click the `+` button at the top of any KPI column. (See **Events** below.) |
+| Edit any milestone | Hover the row → click the `⋯` icon. Modal opens prefilled. |
+| Delete a milestone | Open edit modal → red **Delete** button (bottom-left) → confirm. |
 | Rewind / replay the timeline | Drag the **TODAY** scrubber. The chart redraws to show only milestones completed by that synthetic "today". |
 | Switch chart mode | Click `STEP` / `SMOOTH` in the top-right toggle. |
 | Isolate one KPI | Click a KPI dot in the legend below the chart. Click again to bring it back. |
 | Inspect a milestone | Hover any dot on the chart for a tooltip with planned date, ship date, days early/late. |
 
 The **velocity index** in the topbar is a weighted average of the four KPIs.
+
+#### Events: adding, editing, removing
+
+Every milestone is an event with five fields:
+
+- **KPI** — `Runtime` / `Compliance` / `Advisory` / `Agentic AI`
+- **Name** — short label, shown on the chart tooltip and milestone row
+- **Planned Date** — when you committed to ship it
+- **Weight** — `1` for normal, `2–3` for a big-bet milestone (moves the line more)
+- **Shipped On** *(optional)* — fill this when you're entering a *historical* milestone you've already shipped. Leave empty if it's still pending.
+
+**To add an event:**
+
+1. Click the `+` button at the top of the matching KPI column.
+2. Fill the form. Date pickers are constrained to the roadmap window so wrong-year clicks are impossible.
+3. **Save.** The event appears in the list and on the chart immediately.
+
+**To remove an event:**
+
+1. Hover the row in the milestone list.
+2. Click the `⋯` icon at the right end of the row.
+3. Click the red **Delete** button at the bottom-left of the modal. Confirm.
+
+**Shipping behavior (when you click a row to mark it complete):**
+
+- If the **planned date is in the past** (e.g. you're recording history), the milestone ships **at its planned date** — the dot lands exactly where you planned it.
+- If the **planned date is in the future**, the milestone ships at the **TODAY scrubber position** (= "shipped early").
+- To override either, hover → `⋯` → set **Shipped On** explicitly → Save.
+
+**Un-ship + re-ship preserves the original date.** If you click a shipped row to un-ship, then click again later to re-ship, the original ship date is restored — not stamped to today.
 
 ### Internal view
 

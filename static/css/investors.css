@@ -446,6 +446,15 @@
   color: var(--text-faint);
   text-transform: uppercase;
 }
+.form-hint {
+  font-family: var(--serif);
+  font-style: italic;
+  font-size: 11px;
+  letter-spacing: 0.01em;
+  text-transform: none;
+  color: var(--text-faint);
+  margin-left: 4px;
+}
 .form-row input,
 .form-row select {
   font-family: var(--mono);

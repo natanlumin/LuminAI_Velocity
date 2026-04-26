@@ -192,11 +192,21 @@ async function toggleMilestone(id) {
   if (!m) return;
   const wasCompleted = !!m.completedDate;
   const endpoint = wasCompleted ? 'unship' : 'ship';
+
+  // Ship date: default to the planned date if that date is in the past
+  // (= backfilling history, ship lands where you planned). For
+  // future-planned milestones, fall back to TODAY (= shipped early).
+  // Override either via the ⋯ edit modal.
+  let shipDate = TODAY_DATE;
+  if (!wasCompleted && parseDate(m.date) <= parseDate(TODAY_DATE)) {
+    shipDate = m.date;
+  }
+
   try {
     const resp = await fetch(`/api/milestones/${id}/${endpoint}`, {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ date: TODAY_DATE }),
+      body: JSON.stringify({ date: shipDate }),
     });
     if (!resp.ok) throw new Error('toggle failed');
     const updated = await resp.json();
@@ -355,7 +365,11 @@ function escapeHtmlInv(str) {
 function formatInvDate(iso) {
   const d = new Date(iso + 'T00:00:00');
   const months = ['JAN','FEB','MAR','APR','MAY','JUN','JUL','AUG','SEP','OCT','NOV','DEC'];
-  return `${months[d.getMonth()]} ${d.getDate()}`;
+  const startYear = new Date(ROADMAP_START_TS).getFullYear();
+  const endYear = new Date(ROADMAP_END_TS).getFullYear();
+  const showYear = startYear !== endYear;
+  const yr = showYear ? ` '${String(d.getFullYear()).slice(-2)}` : '';
+  return `${months[d.getMonth()]} ${d.getDate()}${yr}`;
 }
 
 function truncate(s, n) {
@@ -385,8 +399,25 @@ function openMilestoneModal({ kpi = null, milestone = null } = {}) {
   document.getElementById('modal-title').textContent = isEdit ? 'Edit Milestone' : 'New Milestone';
   document.getElementById('ms-kpi').value = milestone?.kpi || kpi || 'runtime';
   document.getElementById('ms-name').value = milestone?.name || '';
-  document.getElementById('ms-date').value = milestone?.date || TODAY_DATE;
+  // For new milestones, default to ~1 month after TODAY (sensible future plan).
+  // For edits, show the saved date as-is.
+  const defaultDate = (() => {
+    if (milestone?.date) return milestone.date;
+    const t = new Date(parseDate(TODAY_DATE));
+    t.setMonth(t.getMonth() + 1);
+    return t.toISOString().slice(0, 10);
+  })();
+  const dateInput = document.getElementById('ms-date');
+  dateInput.value = defaultDate;
+  // Constrain the date picker to the roadmap window so wrong-year clicks
+  // are impossible.
+  dateInput.min = ROADMAP_START;
+  dateInput.max = ROADMAP_END;
   document.getElementById('ms-weight').value = milestone?.weight ?? 1;
+  const completedInput = document.getElementById('ms-completed');
+  completedInput.value = milestone?.completedDate || '';
+  completedInput.min = ROADMAP_START;
+  completedInput.max = ROADMAP_END;
   document.getElementById('ms-delete').hidden = !isEdit;
   document.getElementById('ms-modal').hidden = false;
   setTimeout(() => document.getElementById('ms-name').focus(), 50);
@@ -399,11 +430,13 @@ function closeModal() {
 
 async function submitMilestoneForm(e) {
   e.preventDefault();
+  const completedDateRaw = document.getElementById('ms-completed').value;
   const body = {
     kpi: document.getElementById('ms-kpi').value,
     name: document.getElementById('ms-name').value.trim(),
     date: document.getElementById('ms-date').value,
     weight: parseInt(document.getElementById('ms-weight').value, 10) || 1,
+    completedDate: completedDateRaw || null,
   };
   if (!body.name || !body.date) return;
   const url = _editingId ? `/api/milestones/${_editingId}` : '/api/milestones';

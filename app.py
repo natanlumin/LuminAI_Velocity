@@ -303,13 +303,24 @@ def delete_milestone(ms_id: int):
 # Entrypoint
 # --------------------------------------------------------------------------
 
+def _link(url: str, text: str | None = None) -> str:
+    """Wrap URL in OSC 8 escape so modern terminals render it as a clickable link."""
+    import sys
+    label = text or url
+    if not sys.stdout.isatty():
+        return label
+    return f"\x1b]8;;{url}\x1b\\{label}\x1b]8;;\x1b\\"
+
+
 def _print_banner(host: str, port: int) -> None:
     base = f"http://{host}:{port}"
+    home = base + "/"
+    investors = base + "/investors.html"
     print()
     print("  ━━━  LuminAI VelocityCore  ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━")
     print()
-    print(f"    Internal (sprint KPIs)              {base}/")
-    print(f"    Strategic Velocity (investor view)  {base}/investors.html")
+    print(f"    Internal (sprint KPIs)              {_link(home)}")
+    print(f"    Strategic Velocity (investor view)  {_link(investors)}")
     print()
     print("  Press CTRL+C to stop.  State persists in data/*.json.")
     print("  ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━")
