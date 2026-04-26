@@ -355,6 +355,83 @@ input[type=range].timeline-slider::-moz-range-thumb {
 }
 
 /* =============================================================
+   VIEW SWITCHER + MODE TOGGLES (shared chrome)
+   ============================================================= */
+.view-switcher {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  padding: 10px 36px;
+  border-bottom: 1px solid var(--border);
+  font-family: var(--mono);
+  font-size: 9px;
+  letter-spacing: 0.22em;
+  color: var(--text-faint);
+  text-transform: uppercase;
+  position: relative;
+  z-index: 1;
+}
+.switcher-link {
+  color: var(--text-dim);
+  text-decoration: none;
+  padding: 4px 10px;
+  border: 1px solid transparent;
+  transition: all 160ms var(--ease);
+}
+.switcher-link:hover {
+  color: var(--text);
+  border-color: var(--border-bright);
+}
+.switcher-divider {
+  width: 1px;
+  height: 12px;
+  background: var(--border-bright);
+}
+.switcher-active {
+  color: var(--bg);
+  padding: 4px 10px;
+  border: 1px solid var(--text);
+  background: var(--text);
+}
+.switcher-mode {
+  margin-left: auto;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+.mode-label {
+  color: var(--text-faint);
+  font-size: 9px;
+  letter-spacing: 0.22em;
+}
+.mode-btn {
+  font-family: var(--mono);
+  font-size: 9px;
+  letter-spacing: 0.22em;
+  text-transform: uppercase;
+  background: transparent;
+  color: var(--text-dim);
+  border: 1px solid var(--border-bright);
+  padding: 4px 10px;
+  cursor: pointer;
+  transition: all 160ms var(--ease);
+}
+.mode-btn:hover {
+  color: var(--text);
+  border-color: var(--text-dim);
+}
+.mode-btn.active {
+  color: var(--bg);
+  background: var(--text);
+  border-color: var(--text);
+}
+
+@media (max-width: 720px) {
+  .view-switcher { padding: 10px 20px; flex-wrap: wrap; }
+  .switcher-mode { width: 100%; margin-left: 0; }
+}
+
+/* =============================================================
    GRID
    ============================================================= */
 .grid {

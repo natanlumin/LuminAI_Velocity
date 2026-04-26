@@ -1,0 +1,103 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Strategic Velocity · LuminAI</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Instrument+Serif:ital@0;1&family=Geist:wght@300;400;500;600&family=Geist+Mono:wght@300;400;500;600&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="static/css/main.css">
+  <link rel="stylesheet" href="static/css/investors.css">
+</head>
+<body>
+  <div class="grain" aria-hidden="true"></div>
+  <div class="vignette" aria-hidden="true"></div>
+
+  <header class="topbar">
+    <div class="brand">
+      <span class="brand-mark" aria-hidden="true"></span>
+      <span class="brand-name">LuminAI <em>Strategic Velocity</em></span>
+      <span class="brand-tag">v0.1 · EXTERNAL</span>
+    </div>
+    <div class="sprint-meta">
+      <div class="meta-row"><span class="meta-label">WINDOW</span><span class="meta-value">JUL <span class="dim">'25 →</span> AUG <span class="dim">'26</span></span></div>
+      <div class="meta-row"><span class="meta-label">TODAY</span><span class="meta-value" id="meta-today">APR 26</span></div>
+      <div class="meta-row"><span class="meta-label">ON PLAN</span><span class="meta-value"><span id="meta-onplan">—</span></span></div>
+    </div>
+    <div class="kpi-display">
+      <span class="kpi-label">VELOCITY INDEX</span>
+      <span class="kpi-value" id="overall-value">0%</span>
+      <span class="kpi-status" id="overall-status">—</span>
+    </div>
+  </header>
+
+  <nav class="view-switcher">
+    <a href="index.html" class="switcher-link">↶ INTERNAL VIEW</a>
+    <span class="switcher-divider"></span>
+    <span class="switcher-active">STRATEGIC VELOCITY</span>
+    <span class="switcher-mode">
+      <span class="mode-label">MODE</span>
+      <button class="mode-btn active" data-mode="step">STEP</button>
+      <button class="mode-btn" data-mode="smooth">SMOOTH</button>
+    </span>
+  </nav>
+
+  <section class="timeline" aria-label="Today scrubber">
+    <div class="timeline-label">
+      <span class="tl-eyebrow">TIMELINE</span>
+      <span class="tl-readout">
+        TODAY <span id="tl-today">APR 26</span>
+        <span class="tl-sep">·</span>
+        ELAPSED <span id="tl-elapsed">0</span><span class="dim">/<span id="tl-total">0</span> DAYS</span>
+      </span>
+    </div>
+    <div class="timeline-track-wrap">
+      <div class="timeline-ticks" id="timeline-ticks"></div>
+      <input type="range" id="timeline-slider" class="timeline-slider"
+        min="0" max="425" step="1" value="300" aria-label="Today" />
+    </div>
+    <div class="timeline-presets">
+      <button class="preset" data-role="start">START</button>
+      <button class="preset" data-role="now">NOW</button>
+      <button class="preset" data-role="end">END</button>
+    </div>
+  </section>
+
+  <main class="invest-grid">
+    <section class="panel chart-panel">
+      <header class="panel-header">
+        <h2 class="panel-title"><span class="dot"></span>Burn-Up</h2>
+        <span class="panel-sub"><em>cumulative milestone delivery · % of roadmap</em></span>
+        <span class="hint">hover any milestone · click in list to ship/un-ship</span>
+      </header>
+      <div class="canvas-wrap chart-canvas-wrap">
+        <canvas id="burnup-canvas"></canvas>
+        <div class="tooltip" id="burnup-tooltip" hidden></div>
+      </div>
+      <footer class="canvas-legend" id="burnup-legend"></footer>
+    </section>
+
+    <section class="panel kpi-cards-panel">
+      <header class="panel-header">
+        <h2 class="panel-title"><span class="dot"></span>KPI Health</h2>
+        <span class="panel-sub"><em>by strategic dimension</em></span>
+      </header>
+      <div class="kpi-cards" id="kpi-cards"></div>
+    </section>
+
+    <section class="panel milestones-panel">
+      <header class="panel-header">
+        <h2 class="panel-title"><span class="dot"></span>Milestones</h2>
+        <span class="panel-sub"><em>click to ship · click again to revert</em></span>
+        <span class="hint">live demo of polygon response</span>
+      </header>
+      <div class="milestones-grid" id="milestones-grid"></div>
+    </section>
+  </main>
+
+  <script src="static/js/roadmap-data.js"></script>
+  <script src="static/js/burnup.js"></script>
+  <script src="static/js/investors-app.js"></script>
+</body>
+</html>
