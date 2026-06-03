@@ -8,13 +8,16 @@
 
 let MILESTONES = [];
 
-const INVESTOR_KPIS = ['runtime', 'compliance', 'advisory', 'agenticai'];
+const INVESTOR_KPIS = ['runtime', 'compliance', 'advisory', 'agenticai', 'hallucination', 'vllm', 'versatility'];
 
 const INVESTOR_KPI_LABELS = {
   runtime: 'RUNTIME',
   compliance: 'COMPLIANCE',
   advisory: 'ADVISORY',
   agenticai: 'AGENTIC AI',
+  hallucination: 'HALLUCINATION',
+  vllm: 'vLLM HOOKING',
+  versatility: 'VERSATILITY',
 };
 
 const INVESTOR_KPI_COLORS = {
@@ -22,6 +25,9 @@ const INVESTOR_KPI_COLORS = {
   compliance: '#534AB7',
   advisory: '#185FA5',
   agenticai: '#BA7517',
+  hallucination: '#C13E73',
+  vllm: '#14A89C',
+  versatility: '#8E44AD',
 };
 
 const INVESTOR_KPI_TAGLINES = {
@@ -29,12 +35,15 @@ const INVESTOR_KPI_TAGLINES = {
   compliance: 'EU AI Act + internal risk frameworks',
   advisory: 'HuggingFace model evaluation & risk surfacing',
   agenticai: 'multi-agent attack detection — our differentiator',
+  hallucination: 'factuality + single-turn LLM security, unified',
+  vllm: 'proprietary vLLM hooking — per-model, toward full coverage',
+  versatility: 'breadth across models, tasks, and deployments',
 };
 
 const ROADMAP_START = '2025-07-01';
 const ROADMAP_END = '2026-08-31';
 
-let TODAY_DATE = '2026-04-26';
+let TODAY_DATE = '2026-06-03';
 let CHART_MODE = 'step';
 
 function parseDate(iso) { return new Date(iso + 'T00:00:00').getTime(); }
@@ -81,4 +90,23 @@ const _MILESTONES_SEED = [
   { id: 27, kpi: 'agenticai',  name: 'Multi-agent monitor prototype',   date: '2026-05-25', completedDate: null,         weight: 1 },
   { id: 28, kpi: 'agenticai',  name: 'Goal-hijacking detection',        date: '2026-07-01', completedDate: null,         weight: 2 },
   { id: 29, kpi: 'agenticai',  name: 'Agentic attack live demo',        date: '2026-08-01', completedDate: null,         weight: 1 },
+
+  // HALLUCINATION — factuality, converging with single-turn security at 100%
+  { id: 30, kpi: 'hallucination', name: 'Hallucination detection v1',                    date: '2026-05-15', completedDate: '2026-05-15', weight: 3 },
+  { id: 31, kpi: 'hallucination', name: 'Hallucination eval benchmark',                  date: '2026-06-30', completedDate: null,         weight: 4 },
+  { id: 32, kpi: 'hallucination', name: 'Single-turn security integration',              date: '2026-07-31', completedDate: null,         weight: 5 },
+  { id: 33, kpi: 'hallucination', name: 'Unified hallucination + single-turn security',  date: '2026-08-31', completedDate: null,         weight: 8 },
+
+  // vLLM HOOKING — proprietary hooking tech, per-model toward full coverage
+  { id: 34, kpi: 'vllm', name: 'Qwen model support',               date: '2026-04-15', completedDate: '2026-04-15', weight: 1 },
+  { id: 35, kpi: 'vllm', name: 'NVIDIA Nemotron support',          date: '2026-05-15', completedDate: '2026-05-15', weight: 1 },
+  { id: 36, kpi: 'vllm', name: 'Full vLLM coverage (all models)',  date: '2026-08-31', completedDate: null,         weight: 3 },
+
+  // VERSATILITY — concave ramp: fast early gains, flattening to ~35% at today
+  { id: 37, kpi: 'versatility', name: 'Multi-format input support',       date: '2025-08-20', completedDate: '2025-08-20', weight: 3 },
+  { id: 38, kpi: 'versatility', name: 'Multi-task evaluation modes',      date: '2025-11-15', completedDate: '2025-11-15', weight: 2 },
+  { id: 39, kpi: 'versatility', name: 'Cross-modal coverage',            date: '2026-02-15', completedDate: '2026-02-15', weight: 1 },
+  { id: 40, kpi: 'versatility', name: 'Custom workflow adapters',         date: '2026-05-20', completedDate: '2026-05-20', weight: 1 },
+  { id: 41, kpi: 'versatility', name: 'Plug-in extensibility framework',  date: '2026-07-15', completedDate: null,         weight: 6 },
+  { id: 42, kpi: 'versatility', name: 'Full versatility coverage',        date: '2026-08-31', completedDate: null,         weight: 7 },
 ];

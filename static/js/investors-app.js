@@ -45,6 +45,14 @@ function renderTimeline() {
   const elapsed = Math.round((today - ROADMAP_START_TS) / 86400000);
   slider.value = elapsed;
 
+  // Populate the TODAY readouts on load so they reflect TODAY_DATE rather
+  // than the static "APR 26" placeholder in the HTML (which otherwise only
+  // refreshes when the scrubber is dragged).
+  document.getElementById('meta-today').textContent = formatInvDate(TODAY_DATE);
+  document.getElementById('tl-today').textContent = formatInvDate(TODAY_DATE);
+  document.getElementById('tl-elapsed').textContent = elapsed;
+  document.getElementById('tl-total').textContent = ROADMAP_TOTAL_DAYS;
+
   const ticks = document.getElementById('timeline-ticks');
   const monthNames = ['JAN','FEB','MAR','APR','MAY','JUN','JUL','AUG','SEP','OCT','NOV','DEC'];
   const start = new Date(ROADMAP_START_TS);

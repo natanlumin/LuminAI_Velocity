@@ -130,6 +130,22 @@ SEED_MILESTONES = [
     {"id": 27, "kpi": "agenticai",  "name": "Multi-agent monitor prototype",    "date": "2026-05-25", "completedDate": None,         "weight": 1},
     {"id": 28, "kpi": "agenticai",  "name": "Goal-hijacking detection",         "date": "2026-07-01", "completedDate": None,         "weight": 2},
     {"id": 29, "kpi": "agenticai",  "name": "Agentic attack live demo",         "date": "2026-08-01", "completedDate": None,         "weight": 1},
+
+    {"id": 30, "kpi": "hallucination", "name": "Hallucination detection v1",                   "date": "2026-05-15", "completedDate": "2026-05-15", "weight": 3},
+    {"id": 31, "kpi": "hallucination", "name": "Hallucination eval benchmark",                 "date": "2026-06-30", "completedDate": None,         "weight": 4},
+    {"id": 32, "kpi": "hallucination", "name": "Single-turn security integration",             "date": "2026-07-31", "completedDate": None,         "weight": 5},
+    {"id": 33, "kpi": "hallucination", "name": "Unified hallucination + single-turn security", "date": "2026-08-31", "completedDate": None,         "weight": 8},
+
+    {"id": 34, "kpi": "vllm", "name": "Qwen model support",              "date": "2026-04-15", "completedDate": "2026-04-15", "weight": 1},
+    {"id": 35, "kpi": "vllm", "name": "NVIDIA Nemotron support",         "date": "2026-05-15", "completedDate": "2026-05-15", "weight": 1},
+    {"id": 36, "kpi": "vllm", "name": "Full vLLM coverage (all models)", "date": "2026-08-31", "completedDate": None,         "weight": 3},
+
+    {"id": 37, "kpi": "versatility", "name": "Multi-format input support",      "date": "2025-08-20", "completedDate": "2025-08-20", "weight": 3},
+    {"id": 38, "kpi": "versatility", "name": "Multi-task evaluation modes",     "date": "2025-11-15", "completedDate": "2025-11-15", "weight": 2},
+    {"id": 39, "kpi": "versatility", "name": "Cross-modal coverage",            "date": "2026-02-15", "completedDate": "2026-02-15", "weight": 1},
+    {"id": 40, "kpi": "versatility", "name": "Custom workflow adapters",        "date": "2026-05-20", "completedDate": "2026-05-20", "weight": 1},
+    {"id": 41, "kpi": "versatility", "name": "Plug-in extensibility framework", "date": "2026-07-15", "completedDate": None,         "weight": 6},
+    {"id": 42, "kpi": "versatility", "name": "Full versatility coverage",       "date": "2026-08-31", "completedDate": None,         "weight": 7},
 ]
 
 
@@ -185,7 +201,7 @@ def update_block(block_id: int):
 # Milestones API
 # --------------------------------------------------------------------------
 
-VALID_KPIS = {"runtime", "compliance", "advisory", "agenticai"}
+VALID_KPIS = {"runtime", "compliance", "advisory", "agenticai", "hallucination", "vllm", "versatility"}
 
 
 def _validate_milestone(body: dict, *, partial: bool = False) -> tuple[str | None, dict]:
