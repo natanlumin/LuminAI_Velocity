@@ -277,7 +277,7 @@ function recompute() {
   const todayTs = parseDate(TODAY_DATE);
 
   let trackActualW = 0, trackPlannedW = 0, trackWeight = 0;
-  let globalActualW = 0, globalPlannedW = 0, globalWeight = 0;
+  let globalActualW = 0, globalWeight = 0;
 
   INVESTOR_KPIS.forEach(kpi => {
     const series = Burnup.buildSeries(kpi);
@@ -294,7 +294,6 @@ function recompute() {
 
     // Global index spans every KPI regardless of the active track.
     globalActualW += actualPct * kpiWeight;
-    globalPlannedW += plannedPct * kpiWeight;
     globalWeight += kpiWeight;
 
     // Only active-track KPIs contribute to the track index and have a card
