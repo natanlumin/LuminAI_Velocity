@@ -13,7 +13,7 @@ const INVESTOR_KPIS = ['runtime', 'compliance', 'advisory', 'agenticai', 'halluc
 const INVESTOR_KPI_LABELS = {
   runtime: 'RUNTIME',
   compliance: 'COMPLIANCE',
-  advisory: 'ADVISORY',
+  advisory: 'ADVISOR',
   agenticai: 'AGENTIC AI',
   hallucination: 'HALLUCINATION',
   vllm: 'vLLM HOOKING',
@@ -39,6 +39,26 @@ const INVESTOR_KPI_TAGLINES = {
   vllm: 'proprietary vLLM hooking — per-model, toward full coverage',
   versatility: 'breadth across models, tasks, and deployments',
 };
+
+/* Strategic tracks — named groups over INVESTOR_KPIS. The partition is
+   exhaustive and non-overlapping (every KPI is in exactly one non-'all'
+   track). 'all' is the default and shows the full board. This map is the
+   single place to assign a KPI to a track. */
+const INVESTOR_TRACKS = [
+  { id: 'all',      label: 'ALL',             kpis: INVESTOR_KPIS },
+  { id: 'runtime',  label: 'RUN TIME',        kpis: ['runtime', 'vllm', 'versatility'] },
+  { id: 'offline',  label: 'OFFLINE PRODUCT', kpis: ['advisory', 'compliance'] },
+  { id: 'research', label: 'RESEARCH',        kpis: ['agenticai', 'hallucination'] },
+];
+
+/* Transient demo state (not persisted), like TODAY_DATE / CHART_MODE. */
+let ACTIVE_TRACK = 'all';
+
+/* KPIs belonging to a track id; falls back to all KPIs for unknown ids. */
+function trackKpis(trackId) {
+  const t = INVESTOR_TRACKS.find(x => x.id === trackId);
+  return t ? t.kpis : INVESTOR_KPIS;
+}
 
 const ROADMAP_START = '2025-07-01';
 const ROADMAP_END = '2026-08-31';
