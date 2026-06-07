@@ -29,6 +29,7 @@
       <span class="kpi-label">VELOCITY INDEX</span>
       <span class="kpi-value" id="overall-value">0%</span>
       <span class="kpi-status" id="overall-status">—</span>
+      <span class="kpi-global" id="overall-global" hidden>CO —</span>
     </div>
   </header>
 
@@ -42,6 +43,8 @@
       <button class="mode-btn" data-mode="smooth">SMOOTH</button>
     </span>
   </nav>
+
+  <nav class="track-tabs" id="track-tabs" aria-label="Track filter"></nav>
 
   <section class="timeline" aria-label="Today scrubber">
     <div class="timeline-label">
@@ -109,7 +112,7 @@
           <select id="ms-kpi" required>
             <option value="runtime">Runtime</option>
             <option value="compliance">Compliance</option>
-            <option value="advisory">Advisory</option>
+            <option value="advisory">Advisor</option>
             <option value="agenticai">Agentic AI</option>
             <option value="hallucination">Hallucination</option>
             <option value="vllm">vLLM Hooking</option>
