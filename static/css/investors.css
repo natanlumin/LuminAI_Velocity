@@ -536,3 +536,52 @@
   .view-switcher { padding: 10px 20px; flex-wrap: wrap; }
   .switcher-mode { width: 100%; margin-left: 0; }
 }
+
+/* =============================================================
+   Track tabs — strategic-dimension filter row
+   ============================================================= */
+.track-tabs {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 8px 36px;
+  border-bottom: 1px solid var(--border);
+  position: relative;
+  z-index: 1;
+}
+.track-tab {
+  font-family: var(--mono);
+  font-size: 9px;
+  letter-spacing: 0.22em;
+  text-transform: uppercase;
+  background: transparent;
+  color: var(--text-dim);
+  border: 1px solid var(--border-bright);
+  padding: 5px 12px;
+  cursor: pointer;
+  transition: all 160ms var(--ease);
+}
+.track-tab:hover {
+  color: var(--text);
+  border-color: var(--text-dim);
+}
+.track-tab.active {
+  color: var(--bg);
+  background: var(--text);
+  border-color: var(--text);
+}
+
+/* Global company index shown beside the per-track index when a
+   non-ALL track is active. */
+.kpi-global {
+  font-family: var(--mono);
+  font-size: 9px;
+  letter-spacing: 0.18em;
+  color: var(--text-faint);
+  text-transform: uppercase;
+  margin-top: 2px;
+}
+
+@media (max-width: 720px) {
+  .track-tabs { padding: 8px 20px; flex-wrap: wrap; }
+}
