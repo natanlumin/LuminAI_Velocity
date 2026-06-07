@@ -15,6 +15,7 @@ async function initInvestors() {
 
   renderTimeline();
   renderKpiCards();
+  renderTrackTabs();
   renderMilestonesGrid();
   renderLegend();
   renderModeToggle();
@@ -116,9 +117,34 @@ function updatePresetActive(currentDay) {
   });
 }
 
+function renderTrackTabs() {
+  const nav = document.getElementById('track-tabs');
+  if (!nav) return;
+  nav.innerHTML = INVESTOR_TRACKS.map(t => `
+    <button type="button" class="track-tab ${t.id === ACTIVE_TRACK ? 'active' : ''}"
+      data-track="${t.id}">${t.label}</button>
+  `).join('');
+  nav.querySelectorAll('.track-tab').forEach(btn => {
+    btn.addEventListener('click', () => setActiveTrack(btn.dataset.track));
+  });
+}
+
+function setActiveTrack(trackId) {
+  ACTIVE_TRACK = trackId;
+  document.querySelectorAll('.track-tab').forEach(b =>
+    b.classList.toggle('active', b.dataset.track === trackId));
+  // Chart: reuse the existing visible-KPI mechanism (same one the legend uses).
+  Burnup.setVisibleKpis(new Set(trackKpis(trackId)));
+  // Panels that list KPIs re-render to the active track's KPIs only.
+  renderKpiCards();
+  renderMilestonesGrid();
+  renderLegend();
+  recompute();
+}
+
 function renderKpiCards() {
   const container = document.getElementById('kpi-cards');
-  container.innerHTML = INVESTOR_KPIS.map(kpi => `
+  container.innerHTML = trackKpis(ACTIVE_TRACK).map(kpi => `
     <article class="kpi-card" data-kpi="${kpi}" style="--kpi-color: ${INVESTOR_KPI_COLORS[kpi]}">
       <div class="kpi-card-strip"></div>
       <div class="kpi-card-body">
@@ -142,7 +168,7 @@ function renderKpiCards() {
 
 function renderMilestonesGrid() {
   const container = document.getElementById('milestones-grid');
-  container.innerHTML = INVESTOR_KPIS.map(kpi => {
+  container.innerHTML = trackKpis(ACTIVE_TRACK).map(kpi => {
     const ms = MILESTONES.filter(m => m.kpi === kpi).sort((a, b) => parseDate(a.date) - parseDate(b.date));
     return `
       <div class="ms-column" data-kpi="${kpi}" style="--kpi-color: ${INVESTOR_KPI_COLORS[kpi]}">
@@ -240,7 +266,7 @@ async function toggleMilestone(id) {
 
 function renderLegend() {
   const c = document.getElementById('burnup-legend');
-  c.innerHTML = INVESTOR_KPIS.map(k => `
+  c.innerHTML = trackKpis(ACTIVE_TRACK).map(k => `
     <button type="button" class="legend-item legend-toggle" data-kpi="${k}">
       <span class="legend-dot" style="background: ${INVESTOR_KPI_COLORS[k]}"></span>${INVESTOR_KPI_LABELS[k]}
     </button>
