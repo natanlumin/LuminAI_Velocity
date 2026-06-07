@@ -273,57 +273,75 @@ function renderModeToggle() {
 }
 
 function recompute() {
-  let totalActualWeighted = 0;
-  let totalPlannedWeighted = 0;
-  let totalWeight = 0;
+  const activeKpis = trackKpis(ACTIVE_TRACK);
+  const todayTs = parseDate(TODAY_DATE);
+
+  let trackActualW = 0, trackPlannedW = 0, trackWeight = 0;
+  let globalActualW = 0, globalPlannedW = 0, globalWeight = 0;
 
   INVESTOR_KPIS.forEach(kpi => {
     const series = Burnup.buildSeries(kpi);
     const ms = MILESTONES.filter(m => m.kpi === kpi);
-    const todayTs = parseDate(TODAY_DATE);
 
     const actualPct = series.actual.length > 0
       ? series.actual[series.actual.length - 1].value
       : 0;
-
     const plannedByToday = ms
       .filter(m => parseDate(m.date) <= todayTs)
       .reduce((s, m) => s + m.weight, 0);
     const plannedPct = series.weightTotal > 0 ? (plannedByToday / series.weightTotal) * 100 : 0;
-
-    const card = document.querySelector(`.kpi-card[data-kpi="${kpi}"]`);
-    card.querySelector('.kpi-card-actual').textContent = actualPct.toFixed(0);
-    card.querySelector('.kpi-card-planned').textContent = plannedPct.toFixed(0);
-    card.querySelector('.kpi-card-count').textContent =
-      `${series.completedCount}/${series.total} milestones`;
-
-    const next = ms
-      .filter(m => !m.completedDate)
-      .sort((a, b) => parseDate(a.date) - parseDate(b.date))[0];
-    card.querySelector('.kpi-card-next').textContent =
-      next ? `next: ${truncate(next.name, 28)} · ${formatInvDate(next.date)}` : 'all milestones complete';
-
-    const status = compareStatus(actualPct, plannedPct);
-    const statusEl = card.querySelector('.kpi-card-status');
-    statusEl.className = 'kpi-card-status ' + status;
-    statusEl.textContent = statusLabelInv(status);
-
     const kpiWeight = ms.reduce((s, m) => s + m.weight, 0);
-    totalActualWeighted += actualPct * kpiWeight;
-    totalPlannedWeighted += plannedPct * kpiWeight;
-    totalWeight += kpiWeight;
+
+    // Global index spans every KPI regardless of the active track.
+    globalActualW += actualPct * kpiWeight;
+    globalPlannedW += plannedPct * kpiWeight;
+    globalWeight += kpiWeight;
+
+    // Only active-track KPIs contribute to the track index and have a card
+    // in the DOM to update.
+    if (activeKpis.includes(kpi)) {
+      trackActualW += actualPct * kpiWeight;
+      trackPlannedW += plannedPct * kpiWeight;
+      trackWeight += kpiWeight;
+
+      const card = document.querySelector(`.kpi-card[data-kpi="${kpi}"]`);
+      if (card) {
+        card.querySelector('.kpi-card-actual').textContent = actualPct.toFixed(0);
+        card.querySelector('.kpi-card-planned').textContent = plannedPct.toFixed(0);
+        card.querySelector('.kpi-card-count').textContent =
+          `${series.completedCount}/${series.total} milestones`;
+
+        const next = ms
+          .filter(m => !m.completedDate)
+          .sort((a, b) => parseDate(a.date) - parseDate(b.date))[0];
+        card.querySelector('.kpi-card-next').textContent =
+          next ? `next: ${truncate(next.name, 28)} · ${formatInvDate(next.date)}` : 'all milestones complete';
+
+        const status = compareStatus(actualPct, plannedPct);
+        const statusEl = card.querySelector('.kpi-card-status');
+        statusEl.className = 'kpi-card-status ' + status;
+        statusEl.textContent = statusLabelInv(status);
+      }
+    }
   });
 
-  const overallActual = totalWeight > 0 ? totalActualWeighted / totalWeight : 0;
-  const overallPlanned = totalWeight > 0 ? totalPlannedWeighted / totalWeight : 0;
-  const overallStatus = compareStatus(overallActual, overallPlanned);
+  // Header shows the ACTIVE TRACK's index prominently.
+  const trackActual = trackWeight > 0 ? trackActualW / trackWeight : 0;
+  const trackPlanned = trackWeight > 0 ? trackPlannedW / trackWeight : 0;
+  const trackStatus = compareStatus(trackActual, trackPlanned);
 
-  animateNum(document.getElementById('overall-value'), overallActual, '%');
-  document.getElementById('meta-onplan').textContent = overallPlanned.toFixed(0) + '%';
-
+  animateNum(document.getElementById('overall-value'), trackActual, '%');
+  document.getElementById('meta-onplan').textContent = trackPlanned.toFixed(0) + '%';
   const overallStatusEl = document.getElementById('overall-status');
-  overallStatusEl.className = 'kpi-status ' + overallStatus;
-  overallStatusEl.textContent = statusLabelInv(overallStatus);
+  overallStatusEl.className = 'kpi-status ' + trackStatus;
+  overallStatusEl.textContent = statusLabelInv(trackStatus);
+
+  // Global company index, shown beside the track index only when a specific
+  // track is active (on ALL it equals the track index, so it's redundant).
+  const globalActual = globalWeight > 0 ? globalActualW / globalWeight : 0;
+  const globalEl = document.getElementById('overall-global');
+  globalEl.hidden = (ACTIVE_TRACK === 'all');
+  globalEl.textContent = `CO ${globalActual.toFixed(0)}%`;
 }
 
 function compareStatus(actual, planned) {
