@@ -153,6 +153,7 @@ function renderKpiCards() {
           <span class="kpi-card-status">—</span>
         </div>
         <div class="kpi-card-tagline">${INVESTOR_KPI_TAGLINES[kpi]}</div>
+        <div class="kpi-card-desc">${escapeHtmlInv(INVESTOR_KPI_DESCRIPTIONS[kpi] || '')}</div>
         <div class="kpi-card-num">
           <span class="kpi-card-actual">0</span><span class="kpi-card-pct">%</span>
           <span class="kpi-card-vsplan">vs <span class="kpi-card-planned">0</span>% planned</span>

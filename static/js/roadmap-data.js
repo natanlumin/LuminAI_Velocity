@@ -8,7 +8,7 @@
 
 let MILESTONES = [];
 
-const INVESTOR_KPIS = ['runtime', 'compliance', 'advisory', 'agenticai', 'hallucination', 'vllm', 'versatility'];
+const INVESTOR_KPIS = ['runtime', 'compliance', 'advisory', 'agenticai', 'hallucination', 'vllm', 'versatility', 'multirule'];
 
 const INVESTOR_KPI_LABELS = {
   runtime: 'RUNTIME',
@@ -18,6 +18,7 @@ const INVESTOR_KPI_LABELS = {
   hallucination: 'HALLUCINATION',
   vllm: 'vLLM HOOKING',
   versatility: 'VERSATILITY',
+  multirule: 'MULTIPLE RULES PARALLELISM',
 };
 
 const INVESTOR_KPI_COLORS = {
@@ -28,6 +29,7 @@ const INVESTOR_KPI_COLORS = {
   hallucination: '#C13E73',
   vllm: '#14A89C',
   versatility: '#8E44AD',
+  multirule: '#3FA7D6',
 };
 
 const INVESTOR_KPI_TAGLINES = {
@@ -38,6 +40,20 @@ const INVESTOR_KPI_TAGLINES = {
   hallucination: 'factuality + single-turn LLM security, unified',
   vllm: 'proprietary vLLM hooking — per-model, toward full coverage',
   versatility: 'breadth across models, tasks, and deployments',
+  multirule: 'concurrent multi-rule evaluation per prompt — latency at scale',
+};
+
+/* Longer per-KPI descriptions — shown under the short tagline on each
+   KPI health card. One to two sentences of strategic context. */
+const INVESTOR_KPI_DESCRIPTIONS = {
+  runtime: 'Production-grade detection running inline in live LLM deployments. From the first DLP prototype through v2 contrastive-learning detection, now hardening vLLM streaming, batching, and multi-model telemetry.',
+  compliance: 'Translates the EU AI Act and our internal risk taxonomy into shippable controls — Article 9 and 13 mappings in place today, with SOC 2 readiness next on the path.',
+  advisory: 'HuggingFace model evaluation and risk surfacing across vision, tabular, and generative tasks — maturing the eval pipelines toward the first customer pilot launch.',
+  agenticai: 'Multi-agent attack detection, our core differentiator. From attack taxonomy and AgentDojo setup through goal-hijacking detection and a live agentic attack demo.',
+  hallucination: 'Factuality detection converging with single-turn LLM security into one unified guard, validated against a dedicated hallucination eval benchmark.',
+  vllm: 'Proprietary vLLM hooking brought up per model — Qwen and NVIDIA Nemotron today — advancing toward full coverage across every supported model.',
+  versatility: 'Breadth across input formats, evaluation tasks, and deployment modes, made extensible through plug-in adapters on the way to full versatility coverage.',
+  multirule: 'Evaluates many detection rules concurrently within a single prompt, collapsing per-rule latency at scale — 20 rules/prompt from 0.92 ms down to 0.0155 ms, heading toward full parallel coverage.',
 };
 
 /* Strategic tracks — named groups over INVESTOR_KPIS. The partition is
@@ -46,7 +62,7 @@ const INVESTOR_KPI_TAGLINES = {
    single place to assign a KPI to a track. */
 const INVESTOR_TRACKS = [
   { id: 'all',      label: 'ALL',             kpis: INVESTOR_KPIS },
-  { id: 'runtime',  label: 'RUN TIME',        kpis: ['runtime', 'vllm', 'versatility'] },
+  { id: 'runtime',  label: 'RUN TIME',        kpis: ['runtime', 'vllm', 'versatility', 'multirule'] },
   { id: 'offline',  label: 'OFFLINE PRODUCT', kpis: ['advisory', 'compliance'] },
   { id: 'research', label: 'RESEARCH',        kpis: ['agenticai', 'hallucination'] },
 ];
@@ -129,4 +145,9 @@ const _MILESTONES_SEED = [
   { id: 40, kpi: 'versatility', name: 'Custom workflow adapters',         date: '2026-05-20', completedDate: '2026-05-20', weight: 1 },
   { id: 41, kpi: 'versatility', name: 'Plug-in extensibility framework',  date: '2026-07-15', completedDate: null,         weight: 6 },
   { id: 42, kpi: 'versatility', name: 'Full versatility coverage',        date: '2026-08-31', completedDate: null,         weight: 7 },
+
+  // MULTIPLE RULES PARALLELISM — concurrent multi-rule eval per prompt; latency at scale
+  { id: 43, kpi: 'multirule', name: '20 rules/prompt @ 0.92 ms',          date: '2026-04-15', completedDate: '2026-04-15', weight: 5 },
+  { id: 44, kpi: 'multirule', name: '20 rules/prompt @ 0.0155 ms',        date: '2026-06-20', completedDate: '2026-06-20', weight: 15 },
+  { id: 45, kpi: 'multirule', name: 'Full multi-rule parallel coverage',  date: '2026-08-31', completedDate: null,         weight: 80 },
 ];
