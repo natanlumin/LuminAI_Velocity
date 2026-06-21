@@ -146,6 +146,10 @@ SEED_MILESTONES = [
     {"id": 40, "kpi": "versatility", "name": "Custom workflow adapters",        "date": "2026-05-20", "completedDate": "2026-05-20", "weight": 1},
     {"id": 41, "kpi": "versatility", "name": "Plug-in extensibility framework", "date": "2026-07-15", "completedDate": None,         "weight": 6},
     {"id": 42, "kpi": "versatility", "name": "Full versatility coverage",       "date": "2026-08-31", "completedDate": None,         "weight": 7},
+
+    {"id": 43, "kpi": "multirule", "name": "20 rules/prompt @ 0.92 ms",         "date": "2026-04-15", "completedDate": "2026-04-15", "weight": 5},
+    {"id": 44, "kpi": "multirule", "name": "20 rules/prompt @ 0.0155 ms",       "date": "2026-06-20", "completedDate": "2026-06-20", "weight": 15},
+    {"id": 45, "kpi": "multirule", "name": "Full multi-rule parallel coverage", "date": "2026-08-31", "completedDate": None,         "weight": 80},
 ]
 
 
